@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_sections_related_question",
+  "info": {
+    "displayName": "Related Question",
+    "icon": "question",
+    "description": "Single question with rich text answer (paragraph + list)"
+  },
+  "options": {},
+  "attributes": {
+    "question": {
+      "type": "string",
+      "required": true
+    },
+    "answer": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

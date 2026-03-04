@@ -191,6 +191,51 @@ input ComponentSectionsPromoBannerInput {
   intro: String
 }
 
+type ComponentSectionsRelatedQuestion {
+  answer: String!
+  id: ID!
+  question: String!
+}
+
+input ComponentSectionsRelatedQuestionFiltersInput {
+  and: [ComponentSectionsRelatedQuestionFiltersInput]
+  answer: StringFilterInput
+  not: ComponentSectionsRelatedQuestionFiltersInput
+  or: [ComponentSectionsRelatedQuestionFiltersInput]
+  question: StringFilterInput
+}
+
+input ComponentSectionsRelatedQuestionInput {
+  answer: String
+  id: ID
+  question: String
+}
+
+type ComponentSectionsRelatedQuestions {
+  askMoreQuestionsLink: String
+  heading: String
+  id: ID!
+  questions(filters: ComponentSectionsRelatedQuestionFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): [ComponentSectionsRelatedQuestion]
+  sectionId: String
+}
+
+input ComponentSectionsRelatedQuestionsFiltersInput {
+  and: [ComponentSectionsRelatedQuestionsFiltersInput]
+  askMoreQuestionsLink: StringFilterInput
+  heading: StringFilterInput
+  not: ComponentSectionsRelatedQuestionsFiltersInput
+  or: [ComponentSectionsRelatedQuestionsFiltersInput]
+  sectionId: StringFilterInput
+}
+
+input ComponentSectionsRelatedQuestionsInput {
+  askMoreQuestionsLink: String
+  heading: String
+  id: ID
+  questions: [ComponentSectionsRelatedQuestionInput]
+  sectionId: String
+}
+
 """
 A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -320,7 +365,7 @@ type ExperienceRelationResponseCollection {
   nodes: [Experience!]!
 }
 
-union ExperienceSectionsDynamicZone = ComponentSectionsCta | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsPromoBanner | Error
+union ExperienceSectionsDynamicZone = ComponentSectionsCta | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsPromoBanner | ComponentSectionsRelatedQuestions | Error
 
 scalar ExperienceSectionsDynamicZoneInput
 
@@ -355,7 +400,7 @@ input FloatFilterInput {
   startsWith: Float
 }
 
-union GenericMorph = ComponentSectionsCta | ComponentSectionsInfoBlock | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsMediaCollectionItem | ComponentSectionsPromoBanner | Experience | I18NLocale | ReviewWorkflowsWorkflow | ReviewWorkflowsWorkflowStage | UploadFile | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Video
+union GenericMorph = ComponentSectionsCta | ComponentSectionsInfoBlock | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsMediaCollectionItem | ComponentSectionsPromoBanner | ComponentSectionsRelatedQuestion | ComponentSectionsRelatedQuestions | Experience | I18NLocale | ReviewWorkflowsWorkflow | ReviewWorkflowsWorkflowStage | UploadFile | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Video
 
 type I18NLocale {
   code: String

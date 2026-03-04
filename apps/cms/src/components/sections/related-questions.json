@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_sections_related_questions",
+  "info": {
+    "displayName": "Related Questions",
+    "icon": "discuss",
+    "description": "Accordion of related Q&A with optional link to section and Ask Yours CTA"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": false
+    },
+    "sectionId": {
+      "type": "string",
+      "required": false
+    },
+    "askMoreQuestionsLink": {
+      "type": "string",
+      "required": false
+    },
+    "questions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "sections.related-question",
+      "required": false
+    }
+  }
+}
