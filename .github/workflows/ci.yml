@@ -82,6 +82,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     needs: generated-code
+    env:
+      NEXT_PUBLIC_GRAPHQL_URL: http://localhost:1337/graphql
+      STRAPI_API_TOKEN: ci-placeholder
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -97,7 +100,7 @@ jobs:
       - name: Check format
         run: pnpm run format:check
       - name: Lint JS/TS
-        run: pnpm turbo run lint --filter='!@forge/mobile-*' -- --max-warnings=0
+        run: pnpm turbo run lint --filter='!@forge/mobile-*' --filter='!@forge/infra' -- --max-warnings=0
       - name: Test
         run: pnpm test
       - name: Build

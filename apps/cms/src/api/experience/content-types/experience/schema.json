@@ -35,6 +35,24 @@
         }
       }
     },
+    "title": {
+      "type": "string",
+      "required": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "metaDescription": {
+      "type": "text",
+      "required": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
     "sections": {
       "type": "dynamiczone",
       "components": [
@@ -42,7 +60,11 @@
         "sections.promo-banner",
         "sections.info-blocks",
         "sections.cta",
-        "sections.related-questions"
+        "sections.related-questions",
+        "sections.video-hero",
+        "sections.container",
+        "sections.text",
+        "sections.section"
       ],
       "required": false,
       "pluginOptions": {

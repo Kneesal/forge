@@ -15,3 +15,17 @@ terraform.tfstate.*
 *.tfplan
 **/.build/
 .gradle/
+local.properties
+
+# Xcode user state (do not commit)
+**/xcuserdata/
+**/*.xcuserstate
+
+# iOS app generated token (from apps/cms/.env at build time)
+mobile/ios/App/ForgeApp/Generated/
+
+# Claude Code local state (machine-specific; commands/ is intentionally tracked)
+.claude/settings.local.json
+.claude/cache/
+.claude/debug/
+.claude/telemetry/

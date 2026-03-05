@@ -27,12 +27,49 @@ input BooleanFilterInput {
   startsWith: Boolean
 }
 
+type ComponentSectionsContainer {
+  id: ID!
+  slots(filters: ComponentSectionsContainerSlotFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): [ComponentSectionsContainerSlot]
+}
+
+input ComponentSectionsContainerFiltersInput {
+  and: [ComponentSectionsContainerFiltersInput]
+  not: ComponentSectionsContainerFiltersInput
+  or: [ComponentSectionsContainerFiltersInput]
+  slots: ComponentSectionsContainerSlotFiltersInput
+}
+
+input ComponentSectionsContainerInput {
+  id: ID
+  slots: [ComponentSectionsContainerSlotInput]
+}
+
+type ComponentSectionsContainerSlot {
+  content: [ContainerSlotContentDynamicZone]!
+  gridSpan: Int!
+  id: ID!
+}
+
+input ComponentSectionsContainerSlotFiltersInput {
+  and: [ComponentSectionsContainerSlotFiltersInput]
+  gridSpan: IntFilterInput
+  not: ComponentSectionsContainerSlotFiltersInput
+  or: [ComponentSectionsContainerSlotFiltersInput]
+}
+
+input ComponentSectionsContainerSlotInput {
+  content: [ContainerSlotContentDynamicZoneInput!]
+  gridSpan: Int
+  id: ID
+}
+
 type ComponentSectionsCta {
   body: String!
   buttonLabel: String!
   buttonLink: String!
   heading: String!
   id: ID!
+  widthPercent: Int
 }
 
 input ComponentSectionsCtaFiltersInput {
@@ -43,6 +80,7 @@ input ComponentSectionsCtaFiltersInput {
   heading: StringFilterInput
   not: ComponentSectionsCtaFiltersInput
   or: [ComponentSectionsCtaFiltersInput]
+  widthPercent: IntFilterInput
 }
 
 input ComponentSectionsCtaInput {
@@ -51,6 +89,7 @@ input ComponentSectionsCtaInput {
   buttonLink: String
   heading: String
   id: ID
+  widthPercent: Int
 }
 
 type ComponentSectionsInfoBlock {
@@ -82,6 +121,7 @@ type ComponentSectionsInfoBlocks {
   heading: String
   id: ID!
   intro: String
+  widthPercent: Int
 }
 
 input ComponentSectionsInfoBlocksFiltersInput {
@@ -92,6 +132,7 @@ input ComponentSectionsInfoBlocksFiltersInput {
   intro: StringFilterInput
   not: ComponentSectionsInfoBlocksFiltersInput
   or: [ComponentSectionsInfoBlocksFiltersInput]
+  widthPercent: IntFilterInput
 }
 
 input ComponentSectionsInfoBlocksInput {
@@ -100,6 +141,7 @@ input ComponentSectionsInfoBlocksInput {
   heading: String
   id: ID
   intro: String
+  widthPercent: Int
 }
 
 type ComponentSectionsMediaCollection {
@@ -112,6 +154,7 @@ type ComponentSectionsMediaCollection {
   subtitle: String
   title: String
   variant: ENUM_COMPONENTSECTIONSMEDIACOLLECTION_VARIANT!
+  widthPercent: Int
 }
 
 input ComponentSectionsMediaCollectionFiltersInput {
@@ -126,6 +169,7 @@ input ComponentSectionsMediaCollectionFiltersInput {
   subtitle: StringFilterInput
   title: StringFilterInput
   variant: StringFilterInput
+  widthPercent: IntFilterInput
 }
 
 input ComponentSectionsMediaCollectionInput {
@@ -138,6 +182,7 @@ input ComponentSectionsMediaCollectionInput {
   subtitle: String
   title: String
   variant: ENUM_COMPONENTSECTIONSMEDIACOLLECTION_VARIANT
+  widthPercent: Int
 }
 
 type ComponentSectionsMediaCollectionItem {
@@ -171,6 +216,7 @@ type ComponentSectionsPromoBanner {
   heading: String!
   id: ID!
   intro: String
+  widthPercent: Int
 }
 
 input ComponentSectionsPromoBannerFiltersInput {
@@ -181,6 +227,7 @@ input ComponentSectionsPromoBannerFiltersInput {
   intro: StringFilterInput
   not: ComponentSectionsPromoBannerFiltersInput
   or: [ComponentSectionsPromoBannerFiltersInput]
+  widthPercent: IntFilterInput
 }
 
 input ComponentSectionsPromoBannerInput {
@@ -189,6 +236,7 @@ input ComponentSectionsPromoBannerInput {
   heading: String
   id: ID
   intro: String
+  widthPercent: Int
 }
 
 type ComponentSectionsRelatedQuestion {
@@ -235,6 +283,90 @@ input ComponentSectionsRelatedQuestionsInput {
   questions: [ComponentSectionsRelatedQuestionInput]
   sectionId: String
 }
+
+type ComponentSectionsSection {
+  backgroundColor: ENUM_COMPONENTSECTIONSSECTION_BACKGROUNDCOLOR
+  blurHash: String
+  content: [SectionContentDynamicZone]
+  id: ID!
+}
+
+input ComponentSectionsSectionFiltersInput {
+  and: [ComponentSectionsSectionFiltersInput]
+  backgroundColor: StringFilterInput
+  blurHash: StringFilterInput
+  not: ComponentSectionsSectionFiltersInput
+  or: [ComponentSectionsSectionFiltersInput]
+}
+
+input ComponentSectionsSectionInput {
+  backgroundColor: ENUM_COMPONENTSECTIONSSECTION_BACKGROUNDCOLOR
+  blurHash: String
+  content: [SectionContentDynamicZoneInput!]
+  id: ID
+}
+
+type ComponentSectionsText {
+  content: String!
+  heading: String
+  headingLevel: ENUM_COMPONENTSECTIONSTEXT_HEADINGLEVEL
+  id: ID!
+  subtitle: String
+  variant: ENUM_COMPONENTSECTIONSTEXT_VARIANT
+}
+
+input ComponentSectionsTextFiltersInput {
+  and: [ComponentSectionsTextFiltersInput]
+  content: StringFilterInput
+  heading: StringFilterInput
+  headingLevel: StringFilterInput
+  not: ComponentSectionsTextFiltersInput
+  or: [ComponentSectionsTextFiltersInput]
+  subtitle: StringFilterInput
+  variant: StringFilterInput
+}
+
+input ComponentSectionsTextInput {
+  content: String
+  heading: String
+  headingLevel: ENUM_COMPONENTSECTIONSTEXT_HEADINGLEVEL
+  id: ID
+  subtitle: String
+  variant: ENUM_COMPONENTSECTIONSTEXT_VARIANT
+}
+
+type ComponentSectionsVideoHero {
+  ctaLabel: String
+  ctaLink: String
+  heading: String
+  id: ID!
+  subheading: String
+  video: Video!
+}
+
+input ComponentSectionsVideoHeroFiltersInput {
+  and: [ComponentSectionsVideoHeroFiltersInput]
+  ctaLabel: StringFilterInput
+  ctaLink: StringFilterInput
+  heading: StringFilterInput
+  not: ComponentSectionsVideoHeroFiltersInput
+  or: [ComponentSectionsVideoHeroFiltersInput]
+  subheading: StringFilterInput
+  video: VideoFiltersInput
+}
+
+input ComponentSectionsVideoHeroInput {
+  ctaLabel: String
+  ctaLink: String
+  heading: String
+  id: ID
+  subheading: String
+  video: ID
+}
+
+union ContainerSlotContentDynamicZone = ComponentSectionsMediaCollection | ComponentSectionsText | Error
+
+scalar ContainerSlotContentDynamicZoneInput
 
 """
 A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
@@ -308,6 +440,28 @@ enum ENUM_COMPONENTSECTIONSMEDIACOLLECTION_VARIANT {
   player
 }
 
+enum ENUM_COMPONENTSECTIONSSECTION_BACKGROUNDCOLOR {
+  dark
+  default
+  light
+  primary
+}
+
+enum ENUM_COMPONENTSECTIONSTEXT_HEADINGLEVEL {
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6
+}
+
+enum ENUM_COMPONENTSECTIONSTEXT_VARIANT {
+  default
+  lead
+  small
+}
+
 type Error {
   code: String!
   message: String
@@ -320,9 +474,11 @@ type Experience {
   locale: String
   localizations(filters: ExperienceFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): [Experience]!
   localizations_connection(filters: ExperienceFiltersInput, pagination: PaginationArg = {}, sort: [String] = []): ExperienceRelationResponseCollection
+  metaDescription: String
   publishedAt: DateTime
   sections: [ExperienceSectionsDynamicZone]
   slug: String!
+  title: String
   updatedAt: DateTime
 }
 
@@ -347,25 +503,29 @@ input ExperienceFiltersInput {
   isHomepage: BooleanFilterInput
   locale: StringFilterInput
   localizations: ExperienceFiltersInput
+  metaDescription: StringFilterInput
   not: ExperienceFiltersInput
   or: [ExperienceFiltersInput]
   publishedAt: DateTimeFilterInput
   slug: StringFilterInput
+  title: StringFilterInput
   updatedAt: DateTimeFilterInput
 }
 
 input ExperienceInput {
   isHomepage: Boolean
+  metaDescription: String
   publishedAt: DateTime
   sections: [ExperienceSectionsDynamicZoneInput!]
   slug: String
+  title: String
 }
 
 type ExperienceRelationResponseCollection {
   nodes: [Experience!]!
 }
 
-union ExperienceSectionsDynamicZone = ComponentSectionsCta | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsPromoBanner | ComponentSectionsRelatedQuestions | Error
+union ExperienceSectionsDynamicZone = ComponentSectionsContainer | ComponentSectionsCta | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsPromoBanner | ComponentSectionsRelatedQuestions | ComponentSectionsSection | ComponentSectionsText | ComponentSectionsVideoHero | Error
 
 scalar ExperienceSectionsDynamicZoneInput
 
@@ -400,7 +560,7 @@ input FloatFilterInput {
   startsWith: Float
 }
 
-union GenericMorph = ComponentSectionsCta | ComponentSectionsInfoBlock | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsMediaCollectionItem | ComponentSectionsPromoBanner | ComponentSectionsRelatedQuestion | ComponentSectionsRelatedQuestions | Experience | I18NLocale | ReviewWorkflowsWorkflow | ReviewWorkflowsWorkflowStage | UploadFile | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Video
+union GenericMorph = ComponentSectionsContainer | ComponentSectionsContainerSlot | ComponentSectionsCta | ComponentSectionsInfoBlock | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsMediaCollectionItem | ComponentSectionsPromoBanner | ComponentSectionsRelatedQuestion | ComponentSectionsRelatedQuestions | ComponentSectionsSection | ComponentSectionsText | ComponentSectionsVideoHero | Experience | I18NLocale | ReviewWorkflowsWorkflow | ReviewWorkflowsWorkflowStage | UploadFile | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Video
 
 type I18NLocale {
   code: String
@@ -802,6 +962,10 @@ input ReviewWorkflowsWorkflowStageInput {
 type ReviewWorkflowsWorkflowStageRelationResponseCollection {
   nodes: [ReviewWorkflowsWorkflowStage!]!
 }
+
+union SectionContentDynamicZone = ComponentSectionsContainer | ComponentSectionsCta | ComponentSectionsInfoBlocks | ComponentSectionsMediaCollection | ComponentSectionsPromoBanner | ComponentSectionsText | Error
+
+scalar SectionContentDynamicZoneInput
 
 input StringFilterInput {
   and: [String]
