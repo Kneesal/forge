@@ -62,7 +62,7 @@ export function Section({ data }: SectionProps) {
           {validContent.map((item, index) =>
             item && (item as { __typename?: string }).__typename !== "Error" ? (
               <SectionContentRenderer
-                key={`section-${id ?? index}-${index}`}
+                key={`${(item as SectionContentItem).__typename}-${(item as { id?: string }).id ?? index}-${index}`}
                 item={item as SectionContentItem}
               />
             ) : null,

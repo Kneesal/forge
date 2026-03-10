@@ -47,7 +47,7 @@ export default async function SlugPage({ params }: PageProps) {
       {blocks.map((block, i) => {
         const key =
           "id" in block && typeof block.id === "string"
-            ? block.id
+            ? `${block.id}-${i}`
             : `block-${i}`
         return <SectionRenderer key={key} section={block} />
       })}

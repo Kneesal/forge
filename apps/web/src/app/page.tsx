@@ -25,7 +25,7 @@ export default async function HomePage() {
       {blocks.map((block, i) => {
         const key =
           "id" in block && typeof block.id === "string"
-            ? block.id
+            ? `${block.id}-${i}`
             : `block-${i}`
         return <SectionRenderer key={key} section={block} />
       })}
