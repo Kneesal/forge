@@ -176,10 +176,14 @@ export type WatchExperienceResult =
   | { data: NonNullable<WatchExperience>; error: null }
   | { data: null; error: ErrorLike | Error }
 
+/** Tags for targeted revalidation (used by webhook). */
 export function buildExperienceTags(slug?: string): string[] {
-  const tags = ["experience:all"]
-  tags.push(slug ? `experience:slug:${slug}` : "experience:homepage")
-  return tags
+  return [slug ? `experience:slug:${slug}` : "experience:homepage"]
+}
+
+/** All tags for a cache entry (includes experience:all for bulk purge). */
+function buildCacheTags(slug?: string): string[] {
+  return ["experience:all", ...buildExperienceTags(slug)]
 }
 
 /** Fetches experience without Next.js data cache. Use for draft mode. */
@@ -224,6 +228,6 @@ export function getWatchExperience(
   return unstable_cache(
     () => getWatchExperienceUncached(locale, slug),
     [`watch-experience:${locale}:${slug ?? "__homepage__"}`],
-    { tags: buildExperienceTags(slug) },
+    { tags: buildCacheTags(slug), revalidate: 300 },
   )()
 }
