@@ -4,7 +4,11 @@
  */
 
 import type { Metadata } from "next"
-import { getWatchExperience, experienceToMetadata } from "@/lib/content"
+import {
+  getWatchExperience,
+  getWatchExperienceUncached,
+  experienceToMetadata,
+} from "@/lib/content"
 import { getSocialConfig } from "@/lib/social-config"
 
 const SITE_BASE = "https://www.jesusfilm.org"
@@ -33,9 +37,12 @@ const DEFAULT_OG_IMAGE = {
 export async function getExperienceMetadata(
   locale: string,
   slug: string,
-  options?: { pathLocale?: string; pathPrefix?: string },
+  options?: { pathLocale?: string; pathPrefix?: string; uncached?: boolean },
 ): Promise<Metadata> {
-  const result = await getWatchExperience(locale, slug)
+  const fetcher = options?.uncached
+    ? getWatchExperienceUncached
+    : getWatchExperience
+  const result = await fetcher(locale, slug)
   const cms = result.data ? experienceToMetadata(result.data) : null
 
   const title = cms?.title ?? `${slug} ${TITLE_SUFFIX}`

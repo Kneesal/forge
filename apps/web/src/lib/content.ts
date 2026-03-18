@@ -1,5 +1,5 @@
 import type { ErrorLike } from "@apollo/client"
-import { cache } from "react"
+import { unstable_cache } from "next/cache"
 import { graphql, type ResultOf } from "@forge/graphql"
 import client from "@/lib/client"
 import {
@@ -176,37 +176,54 @@ export type WatchExperienceResult =
   | { data: NonNullable<WatchExperience>; error: null }
   | { data: null; error: ErrorLike | Error }
 
-/** Fetches experience (blocks + metadata) by locale and optional slug. Cached per request; slug is a primitive so cache keys are stable. */
-export const getWatchExperience = cache(
-  async (locale: string, slug?: string): Promise<WatchExperienceResult> => {
-    const slugOrNull = slug ?? null
-    const filters =
-      slugOrNull !== null
-        ? { slug: { eq: slugOrNull } }
-        : { isHomepage: { eq: true } }
-    try {
-      // fetchPolicy: "no-cache" ensures fresh data per request; the outer cache()
-      // wrapper deduplicates identical calls within the same server render cycle.
-      const result = await client.query({
-        query: GET_WATCH_EXPERIENCE,
-        variables: { locale, filters },
-        fetchPolicy: "no-cache",
-      })
-      const graphqlErrors = (result as { errors?: Array<{ message?: string }> })
-        .errors
-      if (graphqlErrors?.length) {
-        const msg = graphqlErrors.map((e) => e.message ?? "Unknown").join("; ")
-        return { data: null, error: new Error(msg) }
-      }
-      if (result.error) return { data: null, error: result.error }
-      const exp = result.data?.experiences?.[0]
-      if (!exp) return { data: null, error: new Error("No experience found") }
-      return { data: exp as NonNullable<WatchExperience>, error: null }
-    } catch (e) {
-      return {
-        data: null,
-        error: e instanceof Error ? e : new Error(String(e)),
-      }
+export function buildExperienceTags(slug?: string): string[] {
+  const tags = ["experience:all"]
+  tags.push(slug ? `experience:slug:${slug}` : "experience:homepage")
+  return tags
+}
+
+/** Fetches experience without Next.js data cache. Use for draft mode. */
+export async function getWatchExperienceUncached(
+  locale: string,
+  slug?: string,
+): Promise<WatchExperienceResult> {
+  const slugOrNull = slug ?? null
+  const filters =
+    slugOrNull !== null
+      ? { slug: { eq: slugOrNull } }
+      : { isHomepage: { eq: true } }
+  try {
+    const result = await client.query({
+      query: GET_WATCH_EXPERIENCE,
+      variables: { locale, filters },
+      fetchPolicy: "no-cache",
+    })
+    const graphqlErrors = (result as { errors?: Array<{ message?: string }> })
+      .errors
+    if (graphqlErrors?.length) {
+      const msg = graphqlErrors.map((e) => e.message ?? "Unknown").join("; ")
+      return { data: null, error: new Error(msg) }
     }
-  },
-)
+    if (result.error) return { data: null, error: result.error }
+    const exp = result.data?.experiences?.[0]
+    if (!exp) return { data: null, error: new Error("No experience found") }
+    return { data: exp as NonNullable<WatchExperience>, error: null }
+  } catch (e) {
+    return {
+      data: null,
+      error: e instanceof Error ? e : new Error(String(e)),
+    }
+  }
+}
+
+/** Fetches experience with ISR-compatible caching. Revalidated via tags when Strapi webhook fires. */
+export function getWatchExperience(
+  locale: string,
+  slug?: string,
+): Promise<WatchExperienceResult> {
+  return unstable_cache(
+    () => getWatchExperienceUncached(locale, slug),
+    [`watch-experience:${locale}:${slug ?? "__homepage__"}`],
+    { tags: buildExperienceTags(slug) },
+  )()
+}

@@ -1,10 +1,13 @@
 import type { Metadata } from "next"
-import { getLocale, isLocale } from "@/lib/locale"
-import { getWatchExperience } from "@/lib/content"
+import { draftMode } from "next/headers"
+import { getLocale, isLocale, DEFAULT_LOCALE } from "@/lib/locale"
+import { getWatchExperience, getWatchExperienceUncached } from "@/lib/content"
 import { getExperienceMetadata } from "@/lib/experience-metadata"
 import { SectionRenderer, type Section } from "@/components/sections"
 import { ExperienceEmpty } from "@/components/ExperienceEmpty"
 import { ExperienceError } from "@/components/ExperienceError"
+
+export const revalidate = false
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -18,17 +21,32 @@ export async function generateMetadata({
   // If slug is a locale (e.g. /watch/en), let the homepage handle metadata.
   if (isLocale(slug)) return {}
 
-  const locale = await getLocale()
-  return getExperienceMetadata(locale, slug, { pathPrefix: "watch" })
+  const draft = await draftMode()
+  const locale = draft.isEnabled ? await getLocale() : DEFAULT_LOCALE
+  return getExperienceMetadata(locale, slug, {
+    pathPrefix: "watch",
+    uncached: draft.isEnabled,
+  })
 }
 
 export default async function SlugPage({ params }: PageProps) {
   const { slug } = await params
-  const locale = await getLocale(isLocale(slug) ? slug : undefined)
+  const draft = await draftMode()
 
+  // ISR: use DEFAULT_LOCALE when no locale in URL (Accept-Language varies per user, incompatible with caching)
+  // Draft: use Accept-Language detection as before
+  const locale = isLocale(slug)
+    ? slug
+    : draft.isEnabled
+      ? await getLocale()
+      : DEFAULT_LOCALE
+
+  const fetcher = draft.isEnabled
+    ? getWatchExperienceUncached
+    : getWatchExperience
   const result = isLocale(slug)
-    ? await getWatchExperience(locale)
-    : await getWatchExperience(locale, slug)
+    ? await fetcher(locale)
+    : await fetcher(locale, slug)
 
   if (result.error) {
     return <ExperienceError message={result.error.message} />
