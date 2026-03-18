@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto"
 import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 import { env } from "@/env"
@@ -21,7 +22,11 @@ export async function POST(request: Request) {
     url.searchParams.get("secret") ??
     request.headers.get("x-revalidation-secret")
 
-  if (secret !== env.REVALIDATION_SECRET) {
+  if (
+    !secret ||
+    secret.length !== env.REVALIDATION_SECRET.length ||
+    !timingSafeEqual(Buffer.from(secret), Buffer.from(env.REVALIDATION_SECRET))
+  ) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 })
   }
 

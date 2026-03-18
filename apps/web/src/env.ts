@@ -6,7 +6,7 @@ export const env = createEnv({
     INTERNAL_GRAPHQL_URL: z.url(),
     STRAPI_API_TOKEN: z.string(),
     STRAPI_PREVIEW_SECRET: z.string(),
-    REVALIDATION_SECRET: z.string(),
+    REVALIDATION_SECRET: z.string().min(32),
   },
   client: {
     NEXT_PUBLIC_GRAPHQL_URL: z.url(),
